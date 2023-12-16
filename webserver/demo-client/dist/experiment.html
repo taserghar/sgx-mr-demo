@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<head>
+    <title>SGX-MR Demo - Experiment</title>
+    <link rel="stylesheet" href="demo-client/dist/style.css">
+</head>
+
+<body>
+
+    <!-- Load d3.js for the graph -->
+    <script src="https://d3js.org/d3.v4.js"></script>
+   
+    <!-- <button type = "button" id="receiveButton">Receive message</button> -->
+    
+    <button type = "button" id="runKmeans">Run kmeans</button>
+    <button type = "button" id="runWC">Run word count</button>
+    <button onclick="window.location.href = 'http://localhost:10000/';">Back to Home</button>
+
+    
+    
+    <!--Progress visualization-->
+    <aside>
+        <span id="message" style="white-space: pre-line"></span>
+    </aside>
+    <div>
+        <canvas id="myCanvas" width="750" height="100"></canvas>
+    </div>
+
+    <div>
+        <canvas id="unitCanvas" width="750" height="30"></canvas>
+    </div>
+
+
+    <aside>
+        <span id="message2" style="white-space: pre-line"></span>
+    </aside>
+    <div>
+        <canvas id="myCanvas2" width="750" height="100"></canvas>
+    </div>
+    
+    <div>
+        <canvas id="unitCanvas2" width="750" height="30"></canvas>
+    </div>
+
+    
+    
+    
+
+    <!-- Heat map -->
+    <div style = "display: inline-block">
+        <div id="my_dataviz"></div>
+        <div id="key" style="color: white; weight: bold; visibility: hidden">SGX-MR access patterns</div>
+    </div>
+
+    <div style = "display: inline-block">
+        <div id="my_dataviz2"></div>
+        <div id="key2" style="color: white; visibility: hidden">Unprotected access patterns</div>
+    </div>
+
+    
+    
+    
+    <!--This tag needs to be at the end-->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.5/socket.io.js"></script> -->
+    <script src = "demo-client/dist/main.js"></script>
+</body>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<!-- <head>
+  
+  <html lang="en" itemscope itemtype=" http://schema.org/WebPage">
+  <meta name="google" content="notranslate">
+</head> -->
+
+
+
+<html lang="en" >
+ <title>SGX-MR Demo</title>
+<body>
+<img src="/demo-client/dist/images/homepage_header.png" alt="header image" style="width:1000px;">
+
+<style>
+.btn-group button {
+  background-color: #000080; /* Blue background */
+  border: 1px solid blue; /* Blue border */
+  font-size: 20px;
+  color: white; /* White text */
+  padding: 15px 150px; /* Some padding */
+  cursor: pointer; /* Pointer/hand icon */
+  float: left; /* Float the buttons side by side */
+}
+
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.btn-group button:not(:last-child) {
+  border-right: none; /* Prevent double borders */
+}
+
+/* Add a background color on hover */
+.btn-group button:hover {
+  background-color: white;
+  color: #000080; /* blue text */
+}
+</style>
+
+
+
+
+<div  style="width:1400px; margin:0 auto;" class="btn-group">
+  <button id="compileBtn">Compile</button> 
+  <button onclick="window.location.href = 'http://localhost:10000/';">Demo Home</button>
+
+  
+</div>
+
+<div  style="width:1400px; margin:0 auto;" class="btn-group">
+  
+  <h2 id='compileStatus'>  </h2>
+
+  <p className='element' id='compiledText'> </p>
+  
+  
+</div>
+
+</div>
+
+<div  style="width:800px; margin:0 auto;" class="btn-group">
+  
+<pre  id='srcCode'>
+
+</pre>
+  
+  
+</div>
+
+
+<img src="/demo-client/dist/images/homepage_footer.png" alt="footer image" style="width:1000px;">
+
+<!--This tag needs to be at the end-->
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+  let defined_port = 10000;
+  //for compile command
+
+  // Remember to add predictions if you decide to go that way
+function func() {
+
+    console.log("Compile command Hurray!");
+    processCompileMessage();
+    sendCompileRequest();
+
+ 
+}
+
+  async function processCompileMessage(){
+    //Receive message
+    console.log("Polling for messages...");
+    //Note: receiveMessage returns max 1 message at a time
+    
+    //socket IO starting
+
+    var socket = io();
+    console.log("Socket initialization");
+    
+    let toShow = ""
+    socket.on('SGX-COMPILE', function(data) {
+    // item.textContent = msg;
+    toShow = toShow +  bufferArrayToString(data);
+    document.getElementById('compiledText').innerText = toShow;
+    document.getElementById('compileStatus').innerText = 'Compiling...'
+
+  });
+
+   socket.on('SGX-COMPILE-SUCCESS', function(data) {
+    document.getElementById('compileStatus').innerText = 'Compilation Completed!'
+
+  });
+
+  socket.on('SGX-CODE-PREV', function(data) {
+     document.getElementById('srcCode').innerText = data;
+
+  }); 
+
+
+// Socket IO -- functionalities finish
+ 
+} 
+
+ async function sendCompileRequest(){
+  let url = 'http://localhost:' + defined_port + '/compile_req';
+  url = url;
+  console.log('URL in use: ' + url);
+
+  // You can always add more data to this
+  let bodyOut = {'key': 'compile'};
+  //no-cors option is necessary
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    mode: 'no-cors',
+    body: JSON.stringify(bodyOut)
+  });
+
+  console.log(response);
+};
+
+function bufferArrayToString( buffer ) {
+    var binary = '';
+    var bytes = new Uint8Array( buffer );
+    return new TextDecoder().decode(bytes);
+}
+
+
+document.getElementById("compileBtn").addEventListener("click", () => { func(); });
+
+</script>
+
+
+</html>
+

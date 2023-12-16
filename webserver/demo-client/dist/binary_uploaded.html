@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+ <title>SGX-MR Demo</title>
+<body>
+<img src="/demo-client/dist/images/homepage_header.png" alt="header image" style="width:1000px;">
+
+<style>
+.btn-group button {
+  background-color: #000080; /* Blue background */
+  border: 1px solid blue; /* Blue border */
+  font-size: 20px;
+  color: white; /* White text */
+  padding: 15px 150px; /* Some padding */
+  cursor: pointer; /* Pointer/hand icon */
+  float: left; /* Float the buttons side by side */
+}
+
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.btn-group button:not(:last-child) {
+  border-right: none; /* Prevent double borders */
+}
+
+/* Add a background color on hover */
+.btn-group button:hover {
+  background-color: white;
+  color: #000080; /* blue text */
+}
+</style>
+
+
+<body>
+
+
+<div  style="width:1400px; margin:0 auto;" class="btn-group">
+  <h1 style="color:green;"> Enclave Binary submitted to SGX-MR Server</h1>
+  <button onclick="window.location.href = 'http://localhost:10000/';">Go back to demo home for experiment</button>
+  
+</div>
+
+
+<img src="/demo-client/dist/images/homepage_footer.png" alt="footer image" style="width:1000px;">
+</body>
+</html>
+

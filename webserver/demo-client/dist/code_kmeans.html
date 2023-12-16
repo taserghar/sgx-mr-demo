@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<!-- <head>
+  
+  <html lang="en" itemscope itemtype=" http://schema.org/WebPage">
+  <meta name="google" content="notranslate">
+</head> -->
+
+
+
+<html lang="en" >
+ <title>SGX-MR Demo</title>
+<body onload="initalerts();">
+<img src="/demo-client/dist/images/homepage_header.png" alt="header image" style="width:1000px;">
+
+<style>
+.btn-group button {
+  background-color: #000080; /* Blue background */
+  border: 1px solid blue; /* Blue border */
+  font-size: 20px;
+  color: white; /* White text */
+  padding: 15px 150px; /* Some padding */
+  cursor: pointer; /* Pointer/hand icon */
+  float: left; /* Float the buttons side by side */
+}
+
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.btn-group button:not(:last-child) {
+  border-right: none; /* Prevent double borders */
+}
+
+/* Add a background color on hover */
+.btn-group button:hover {
+  background-color: white;
+  color: #000080; /* blue text */
+}
+</style>
+
+
+
+<!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="demo-client/dist/scripts/bootstrap.min.css" crossorigin="anonymous">
+  <!-- jQuery library -->
+  <script src="demo-client/dist/scripts/jquery.min.js" crossorigin="anonymous"></script>
+  <!-- Popper JS -->
+  <script src="demo-client/dist/scripts/popper.min.js" crossorigin="anonymous"></script>
+  <!-- Latest compiled JavaScript -->
+  <script src="demo-client/dist/scripts/bootstrap.min.js" crossorigin="anonymous"></script>
+
+<!-- prism -->
+<!-- <link href="demo-client/dist/scripts/prism.css" rel="stylesheet" crossorigin="anonymous"/>
+<script src="demo-client/dist/scripts/prism.js"></script> -->
+<!--   <link href="https://{{cdn}}/prismjs@v1.x/themes/prism.css" rel="stylesheet" />
+<script src="https://{{cdn}}/prismjs@v1.x/components/prism-core.min.js"></script>
+  <script src="https://{{cdn}}/prismjs@v1.x/plugins/autoloader/prism-autoloader.min.js"></script>
+ -->
+  
+
+
+
+<div  style="width:1400px; margin:0 auto;" class="btn-group">
+  <button id="compileBtn">Compile</button> 
+  <button id="deployBtn">Deploy Binary</button> 
+  <button onclick="window.location.href = 'http://localhost:10000/';">Demo Home</button>
+</div>
+
+
+<div  style="width:1400px; margin:0 auto;" class="btn-group">
+  
+  <div  style="width:1400px; margin:0 auto;" class="alert alert-success" role="alert" id="binary_submitted">
+  Enclave binary (Enclave.signed.so) deployed to webserver. You can run experiment.
+</div>
+
+  <div  style="width:1400px; margin:0 auto;" class="alert alert-danger" role="alert" id="binary_error">
+  Please Compile the source code first!!!
+</div>
+
+<div  style="width:1400px; margin:0 auto;" class="alert alert-warning" role="alert" id="binary_submitting">
+  Submitting enclave binary...
+</div>
+
+<div  style="width:1400px; margin:0 auto;" class="alert alert-warning" role="alert" id="compiling">
+  Compiling...
+</div>
+
+<div  style="width:1400px; margin:0 auto;" class="alert alert-primary" role="alert" id="compiled">
+  Compilation success.
+</div>
+
+<div  style="width:1400px; margin:0 auto;" class="alert alert-warning" role="alert" id="reading">
+  Reading Code.
+</div>
+
+
+</div>
+<pre  style = "margin-left: 5%;"><code class="language-css" id='compiledText'></code></pre>
+<pre style = "margin-left: 5%;"><code class="language-css" id='srcCode'></code></pre>
+
+<div  style="width:800px; margin:0 auto;" class="btn-group">
+  
+<pre class="language-css" id='srcCode' style="font-size: 13px">
+
+</pre>
+  
+</div>
+<br/>
+
+<img src="/demo-client/dist/images/homepage_footer.png" alt="footer image" style="width:1000px;">
+
+<!--This tag needs to be at the end-->
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+  let defined_port = 10000;
+  var socket;
+
+  //for compile command
+
+  // Remember to add predictions if you decide to go that way
+
+
+function func_code_read() {
+    sendCodeReadReqiest(); 
+}
+
+  async function processSocketMessage(){
+    //Receive message
+    console.log("Polling for messages...");
+    //Note: receiveMessage returns max 1 message at a time
+    
+    //socket IO starting
+
+     socket = io();
+    
+    let toShow = ""
+    socket.on('SGX-COMPILE', function(data) {
+    // item.textContent = msg;
+    toShow = toShow +  bufferArrayToString(data);
+    //hide the code
+  document.getElementById('srcCode').innerText = ""
+  document.getElementById('srcCode').style.display = 'none';
+  document.getElementById('compiledText').innerText = toShow;
+  
+  document.getElementById('binary_error').style.display = 'none' 
+  document.getElementById('binary_submitting').style.display = 'none' 
+  document.getElementById('binary_submitted').style.display = 'none'
+  document.getElementById('compiling').style.display = 'block'
+  document.getElementById('compiled').style.display = 'none'
+
+
+  });
+
+   socket.on('SGX-COMPILE-SUCCESS', function(data) {
+  document.getElementById('binary_submitted').style.display = 'none'
+  document.getElementById('compiling').style.display = 'none'
+  document.getElementById('compiled').style.display = 'block'
+  document.getElementById('binary_submitting').style.display = 'none' 
+
+  });
+
+
+  socket.on('SGX-KMEANS-PREV', function(data) {
+  document.getElementById('srcCode').innerText = data;
+  document.getElementById('reading').style.display = 'none'
+
+  }); 
+
+  socket.on('SGX-BINARY-DEPLOYED', function(data) {
+  document.getElementById('binary_submitting').style.display = 'none' 
+  document.getElementById('binary_submitted').style.display = 'block'
+  document.getElementById('compiling').style.display = 'node'
+  document.getElementById('compiled').style.display = 'none'
+
+  });
+
+// Socket IO -- functionalities finish
+ 
+} 
+
+ async function sendCompileRequest(){
+  let url = 'http://localhost:' + defined_port + '/compile_req';
+  url = url;
+  console.log('URL in use: ' + url);
+
+  // You can always add more data to this
+  let bodyOut = {'key': 'compile'};
+  //no-cors option is necessary
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    mode: 'no-cors',
+    body: JSON.stringify(bodyOut)
+  });
+
+  console.log(response);
+};
+
+ async function sendBinaryDeployRequest(){
+
+  let compile_status = document.getElementById('compiled').style.display;
+  if (compile_status == 'block') {
+    let url = 'http://localhost:' + defined_port + '/binary_deploy_req';
+    url = url;
+    console.log('URL in use: ' + url);
+    document.getElementById('binary_error').style.display = 'none'
+    document.getElementById('binary_submitting').style.display = 'block'
+    document.getElementById('binary_submitted').style.display = 'none'
+    document.getElementById('compiling').style.display = 'none'
+    document.getElementById('compiled').style.display = 'none'
+    
+    // You can always add more data to this
+    let bodyOut = {'key': 'deploy'};
+    //no-cors option is necessary
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      mode: 'no-cors',
+      body: JSON.stringify(bodyOut)
+    });
+
+    console.log(response);
+
+  } else {
+    document.getElementById('binary_error').style.display = 'block'
+    document.getElementById('binary_submitting').style.display = 'none'
+    document.getElementById('binary_submitted').style.display = 'none'
+    document.getElementById('compiling').style.display = 'none'
+    document.getElementById('compiled').style.display = 'none'
+  }
+};
+
+async function sendCodeReadReqiest(){
+  let url = 'http://localhost:' + defined_port + '/kmeans_prev_req';
+  url = url;
+  console.log('URL in use: ' + url);
+
+  // You can always add more data to this
+  let bodyOut = {'key': 'prev'};
+  //no-cors option is necessary
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    mode: 'no-cors',
+    body: JSON.stringify(bodyOut)
+  });
+
+  console.log(response);
+};
+
+function bufferArrayToString( buffer ) {
+    var binary = '';
+    var bytes = new Uint8Array( buffer );
+    return new TextDecoder().decode(bytes);
+}
+
+
+function initalerts() {
+  processSocketMessage();   
+
+  document.getElementById('binary_error').style.display = 'none'
+  document.getElementById('binary_submitting').style.display = 'none'
+  document.getElementById('binary_submitted').style.display = 'none'
+  document.getElementById('compiling').style.display = 'none'
+  document.getElementById('compiled').style.display = 'none'
+
+  
+setTimeout(() => {
+    console.log('Hello, World!');
+    sendCodeReadReqiest();
+}, 1000);
+
+}
+document.getElementById("compileBtn").addEventListener("click", () => { sendCompileRequest(); });
+document.getElementById("deployBtn").addEventListener("click", () => { sendBinaryDeployRequest(); });
+
+</script>
+
+
+</html>
+

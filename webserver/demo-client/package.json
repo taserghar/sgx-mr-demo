@@ -1,0 +1,26 @@
+{
+  "name": "sgx-mr-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-cognito-identity": "^3.19.0",
+    "@aws-sdk/client-sqs": "^3.19.0",
+    "@aws-sdk/credential-provider-cognito-identity": "^3.19.0",
+    "amqplib": "^0.10.3",
+    "npx": "^10.2.2",
+    "socket.io-client": "^4.7.1"
+  },
+  "type": "module",
+  "devDependencies": {
+    "webpack": "^5.41.1",
+    "webpack-cli": "^4.7.2"
+  }
+}
