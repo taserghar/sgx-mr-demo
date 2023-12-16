@@ -8,11 +8,11 @@ Trusted Execution Environments, such as Intel SGX, use hardware supports to ensu
 
 ## Step 1: 
 ### Run the below command in the terminal:
-docker run --env http_proxy --env https_proxy  -p 5000:5000 -p 5672:5672 -p 15672:15672 -it mubashwir/sgx_demo:sim
+docker run --env http_proxy --env https_proxy  -p 10000:10000 -p 5672:5672 -p 15672:15672 -it mubashwir/sgx_demo:sim
 
 
 ## Step 2: 
 ### goto the below link in your local browser (Chrome/Firefox recommended):
-http://localhost:5000/
+http://localhost:10000/
 
 # To build from the source use docker build command.
