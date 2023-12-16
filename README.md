@@ -1,5 +1,4 @@
-# This repo is the open source for the paper:
-https://ieeexplore.ieee.org/abstract/document/10272464
+This repo is the open source for the paper SGX-MR Prot: https://ieeexplore.ieee.org/abstract/document/10272464
 
 # Demo: SGX-MR-Prot
 Trusted Execution Environments, such as Intel SGX, use hardware supports to ensure the confidentiality and integrity of applications against a compromised cloud system. However, side channels like access patterns remain for adversaries to exploit and obtain sensitive information. Common approaches use oblivious programs or primitives, such as ORAM, to make access patterns oblivious to input data, which are challenging to develop. This demonstration shows a prototype SGX-MR-Prot for efficiently protecting access patterns of SGX-based data-intensive applications and minimizing developers' efforts. SGX-MR-Prot uses the MapReduce framework to regulate application dataflows to reduce the cost of access-pattern protection and hide the data oblivious details from SGX developers. This demonstration will allow users to intuitively understand the unique contributions of the framework-based protection approach via interactive exploration and visualization.
